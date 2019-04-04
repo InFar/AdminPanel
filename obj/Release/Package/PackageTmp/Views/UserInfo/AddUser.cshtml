@@ -1,0 +1,172 @@
+﻿@model AdminPanel.CodeModels.P_User
+@{
+    Layout = null;
+    ViewBag.Title = "AddUser";
+    List<AdminPanel.CodeModels.P_MerchantInfo> MList = ViewBag.MerchantInfo;
+    List<AdminPanel.CodeModels.P_SystemRoles> RList = ViewBag.SystemRoles;
+}
+
+<div class="page-title">
+    <div class="title_left">
+        <h3>人员管理</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>添加用户</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                @using (Html.BeginForm("Save", "UserInfo", FormMethod.Post, new { id = "formForm", onsubmit = "return validateCallback(this,dialogAjaxDone);", @class = "form-horizontal form-label-left", role = "form" }))
+                {
+                    @Html.Hidden("formOperateType")
+                    @Html.Hidden("Id", Model.Id)
+                    @Html.Hidden("User_Code", Model.User_Code)
+                    @Html.Hidden("Creator", Model.Creator)
+                    @Html.Hidden("Creation_Time", Model.Creation_Time)
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="User_Accounts">
+                                用户帐号 <span class="required">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                @Html.TextBox("User_Accounts", Model.User_Accounts, new { @class = "form-control col-md-7 col-xs-12", placeholder = "用户帐号", validateType = "{required:true}", validateMessage = "{required:'不可为空'}" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="User_Pwd">
+                            用户密码 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.Password("User_Pwd", Model.User_Pwd, new { @class = "form-control col-md-7 col-xs-12", placeholder = "用户密码", validateType = "{required:true}", validateMessage = "{required:'不可为空'}" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="User_Name" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            用户姓名 <span class="required">&nbsp;</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("User_Name", Model.User_Name, new { @class = "form-control col-md-7 col-xs-12", placeholder = "用户姓名", validateType = "{required:true}" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="BarCode">
+                            用户性别 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <p style="padding-top:6px;margin:0">
+                                男:<input type="radio" class="flat" name="rbsex"  value="男" checked="" required />
+                                女:<input type="radio" class="flat" name="rbsex"  value="女" />
+                            @Html.Hidden("User_Sex", Model.User_Sex)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            联系电话 <span class="required">&nbsp;</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("User_Phone", Model.User_Phone, new { @class = "form-control col-md-7 col-xs-12", placeholder = "联系电话", validateType = "{required:true}" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            联系地址 <span class="required">&nbsp;</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("User_Address", Model.User_Address, new { @class = "form-control col-md-7 col-xs-12", placeholder = "联系地址", validateType = "{required:true}" })
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="BarCode">
+                            所属商户 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @{
+                                IList<SelectListItem> cItems = new List<SelectListItem>();
+                                SelectListItem selectItem1 = new SelectListItem();
+                                selectItem1.Value = "";
+                                selectItem1.Text = "请选择...";
+                                cItems.Add(selectItem1);
+                                foreach (var c in MList)
+                                {
+                                    SelectListItem selectItem = new SelectListItem();
+                                    selectItem.Value = c.Merchant_Code.ToString();
+                                    selectItem.Text = c.Merchant_Name;
+                                    cItems.Add(selectItem);
+                                }
+                            }
+                            @Html.DropDownList("Merchant_Code", cItems, new { @class = "form-control input-sm col-md-7 col-xs-12" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="BarCode">
+                            用户权限 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @{
+                                IList<SelectListItem> cItems2 = new List<SelectListItem>();
+                                foreach (var c in RList)
+                                {
+                                    SelectListItem selectItem = new SelectListItem();
+                                    selectItem.Value = c.Role_Code.ToString();
+                                    selectItem.Text = c.Role_Name;
+                                    cItems2.Add(selectItem);
+                                }
+                            }
+                            @Html.DropDownList("User_Roles_Code", cItems2, new { @class = "form-control input-sm col-md-7 col-xs-12" })
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            @if (@ViewBag.type == "1")
+                            {
+                                <button type="button" class="btn btn-success" onclick="SaveForm(this,'1')">保存信息</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-success" onclick="SaveForm(this, '0')">保存并增加下一个</button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/build/js/bar.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        var sex = $('#User_Sex').val();
+        $("input:radio[name='rbsex'][value='" + sex + "']").prop("checked", "checked");
+        into_iCheck();
+    });
+    function SaveForm(form, type) {
+        GetV();
+        $thisForm = $(form).parents('form');
+        if (type == "1") {
+            $thisForm.find("[name='formOperateType']").val("");
+        } else {
+            if ($('#User_Pwd').val() == "")
+            {
+                toastr.error("密码不能为空！");
+                return;
+            }
+            $thisForm.find("[name='formOperateType']").val("saveAndNewNext");
+        }
+        var url = "/UserInfo/Save";
+        onlySaveForm(form, url);
+    }
+    function GetV() {
+        $('input:radio[name="rbsex"]').each(function () {
+            if (true == $(this).is(':checked')) {
+                $('#User_Sex').val($(this).val());
+            }
+        });
+    }
+</script>
+

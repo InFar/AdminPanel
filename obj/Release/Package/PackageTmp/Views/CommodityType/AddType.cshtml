@@ -1,0 +1,49 @@
+﻿@model AdminPanel.CodeModels.P_CommodityType
+@{
+    Layout = null;
+    ViewBag.Title = "AddType";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>商品类别</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                @using (Html.BeginForm("Save", "CommodityType", FormMethod.Post, new { id = "ctypeForm", @class = "form-horizontal form-label-left", role = "ctype", onsubmit = "return validateCallback(this,dialogAjaxDone);" }))
+                {
+                    <div class="form-group">
+                        @Html.Hidden("Id", Model.Id)
+                        @Html.Hidden("Type_Code", Model.Type_Code)
+                        @Html.Hidden("Createtime", Model.Creation_Time)
+                        @Html.Hidden("Creator", Model.Creator)
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Type_Name">
+                            分类名称 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("Type_Name", Model.Type_Name, new { @class = "form-control col-md-7 col-xs-12", placeholder = "分类名称", maxlength = "100", validateType = "{required:true}", validateMessage = "{required:'分类名称不可为空'}" })
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-success" onclick="SaveForm(this, 'ctypeForm')">保存</button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SaveForm(btn, formId) {
+        $form = $('#' + formId);
+        var url = "/CommodityType/Save";
+        onlySaveForm(btn, url);
+    }
+</script>

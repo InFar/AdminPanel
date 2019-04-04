@@ -1,0 +1,83 @@
+﻿@model IEnumerable<AdminPanel.CodeModels.P_SystemMenu>
+    @{
+        Layout = null;
+        ViewBag.Title = "MenuList";
+    }
+
+    <div class="col-md-12 col-sm-12 col-xs-12 ">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>菜单管理 <small></small></h2>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_title list_tool_dialog_toolbar">
+                <div class="actions pull-left col-md-offset-0">
+                    <a href="/Jurisdiction/AddMenu" class="btn btn-default btn-sm" data-target="#myModal" data-toggle="modal">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
+                    </a>
+                </div>
+                <div class="actions pull-left col-md-offset-0">
+                    &nbsp;&nbsp;
+                    <a href="/Jurisdiction/AddMenu?code={sid_Iterm}" class="btn btn-default btn-sm" operatetargetid="myModal" relationid="a_edit" nodatatip="请选中信息！" edit="edit" operatetargettype="popdialog">
+                        <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
+                    </a>
+                </div>
+                <div class="actions pull-left col-md-offset-0">
+                    &nbsp;&nbsp;&nbsp;<a href="/Jurisdiction/DeleteMenu?code={sid_Iterm}" class="btn btn-default btn-sm" operatetargettype="ajaxtodo" singleoperate="singleoperate" nodatatip="请选中信息！" confirmtip="确认要删除所选数据吗？">
+                        <i class="fa fa-trash-o"></i>&nbsp;&nbsp;删除
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="orderList_search">
+                </div>
+                    <div>
+                        <table class="table table-striped jambo_table bulk_action " id="MenuList">
+                            <thead>
+                                <tr class="headings">
+                                    <th class="column-title"  style="display:none">CODE</th>
+                                    <th class="column-title">名称 </th>
+                                    <th class="column-title">图标 </th>
+                                    <th class="column-title">地址 </th>
+                                    <th class="column-title">排序 </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            @*<tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="even pointer">
+                                        <td class=" ">@item.Menu_Name</td>
+                                        <td class=" "><i class="fa @item.Menu_Image"></i></td>
+                                        <td class=" ">@item.Menu_Url</td>
+                                        <td class=" ">@item.Menu_Order</td>
+                                        <td class="last">
+                                            <a href="#">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="#">删除</a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>*@
+                        </table>
+                    </div>
+
+
+                </div>
+        </div>
+    </div>
+
+<script src="~/build/js/bar.js" type="text/javascript"></script>
+<script>
+    var defaultColumns = [
+        { "sName": "Menu_Code", "bVisible": false },
+         { "sName": "Menu_Name" },
+         { "sName": "Menu_Image", "render": function (data, type, full) { return "<i class='fa " + data + "'></i>"; } },
+         { "sName": "Menu_Url" },
+         { "sName": "Menu_Order" }
+    ];
+    var submitUrl = '/Jurisdiction/AjaxClassMenuList';//数据获取地址
+    TableManaged.init('MenuList', "orderList_search", defaultColumns, submitUrl);//用table id,table search id,默认列 初始化table对象
+</script>

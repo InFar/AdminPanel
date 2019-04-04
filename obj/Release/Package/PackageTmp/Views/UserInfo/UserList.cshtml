@@ -1,0 +1,116 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "UserList";
+    List<AdminPanel.CodeModels.P_MerchantInfo> MerchantList = ViewBag.MerchantList;
+}
+<div class="page-title">
+    <div class="title_left">
+        <h3>人员管理</h3>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>用户列表</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_title list_tool_dialog_toolbar">
+            <div class="actions pull-left col-md-offset-0">
+                <a href="/UserInfo/AddUser" class="btn btn-default btn-sm" operatetargettype="nextpage">
+                    <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
+                </a>
+            </div>
+            <div class="actions pull-left col-md-offset-0">
+                &nbsp;&nbsp;&nbsp;
+                <a href="/UserInfo/AddUser?code={sid_Iterm}&type=1" class="btn btn-default btn-sm" operatetargetid="InfoList" relationid="a_edit" nodatatip="请选中信息！" edit="edit" operatetargettype="nextpagewithparam">
+                    <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
+                </a>
+            </div>
+            <div class="actions pull-left col-md-offset-0">
+                &nbsp;&nbsp;&nbsp;
+                <a href="/UserInfo/Delete?code={sid_Iterm}" class="btn btn-default btn-sm" operatetargettype="ajaxtodo" singleoperate="singleoperate" nodatatip="请选中信息！" confirmtip="确认要删除所选数据吗？">
+                    <i class="fa fa-trash-o"></i>&nbsp;&nbsp;删除
+                </a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div id="InfoList_search">
+                <form class="form-inline ">
+                    @Html.Hidden("isExecutedSearch", "0")
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_length">
+                                <label>
+                                    所属商户
+                                    @{
+                                        IList<SelectListItem> cItems = new List<SelectListItem>();
+                                        SelectListItem selectItem1 = new SelectListItem();
+                                        selectItem1.Value = "";
+                                        selectItem1.Text = "全部";
+                                        cItems.Add(selectItem1);
+                                        foreach (var c in MerchantList)
+                                        {
+                                            SelectListItem selectItem = new SelectListItem();
+                                            selectItem.Value = c.Merchant_Code.ToString();
+                                            selectItem.Text = c.Merchant_Name;
+                                            cItems.Add(selectItem);
+                                        }
+                                    }
+                                    @Html.DropDownList("searchMname", cItems, new { @class = "form-control input-sm" })
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="dataTables_filter">
+                                <label>
+                                    Search:
+                                    @Html.TextBox("searchparam", "", new { @class = "form-control input-sm", @placeholder = "账号/姓名/联系电话" })
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div>
+                <table class="table table-striped jambo_table bulk_action" id="InfoList">
+                    <thead>
+                        <tr class="headings">
+                            <th class="column-title" style="display:none">CODE</th>
+                            <th class="column-title">登陆账号 </th>
+                            <th class="column-title">姓名 </th>
+                            <th class="column-title">性别 </th>
+                            <th class="column-title">联系电话 </th>
+                            <th class="column-title">地址 </th>
+                            <th class="column-title">所属商户 </th>
+                            <th class="column-title">所属角色 </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/build/js/bar.js" type="text/javascript"></script>
+<script>
+    var defaultColumns = [
+    { "sName": "User_Code", "bVisible": false },
+         { "sName": "User_Accounts" },
+         { "sName": "User_Name" },
+         { "sName": "User_Sex" },
+         { "sName": "User_Phone" },
+         { "sName": "User_Address" },
+         { "sName": "Merchant_Name" },
+         { "sName": "Role_Name" }
+    ];
+    var submitUrl = '/UserInfo/AjaxUserList';//数据获取地址
+    TableManaged.init('InfoList', "InfoList_search", defaultColumns, submitUrl);//用table id,table search id,默认列 初始化table对象
+
+    $("#searchparam,#searchMname").change(function (e) {
+        executeSearch('InfoList', 'InfoList_search')
+    });
+</script>
+

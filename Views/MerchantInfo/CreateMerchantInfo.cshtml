@@ -1,0 +1,91 @@
+﻿@model AdminPanel.CodeModels.P_MerchantInfo
+@{
+    Layout = null;
+    ViewBag.Title = "CreateMerchantInfo";
+}
+<div class="page-title">
+    <div class="title_left">
+        <h3>商户管理</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>新增商户</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                @using (Html.BeginForm("Save", "MerchantInfo", FormMethod.Post, new { id = "formForm", onsubmit = "return validateCallback(this,dialogAjaxDone);", @class = "form-horizontal form-label-left", role = "form" }))
+                {
+                    @Html.Hidden("formOperateType")
+                    @Html.Hidden("Id", Model.Id)
+                    @Html.Hidden("Merchant_Code", Model.Merchant_Code)
+                    @Html.Hidden("Creator", Model.Creator)
+                    @Html.Hidden("Creation_Time", Model.Creation_Time)
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Merchant_Name">
+                            商户名称 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("Merchant_Name", Model.Merchant_Name, new { @class = "form-control col-md-7 col-xs-12", placeholder = "商户名称", validateType = "{required:true}", validateMessage = "{required:'不可为空'}" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="SevenCents_Code">
+                            艾支付id <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("SevenCents_Code", Model.Ipay_Code, new { @class = "form-control col-md-7 col-xs-12", placeholder = "商户艾支付帐号", validateType = "{required:true}", validateMessage = "{required:'不可为空'}" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Merchant_Address">
+                            商户地址 <span class="required">&nbsp;</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("Merchant_Address", Model.Merchant_Address, new { @class = "form-control col-md-7 col-xs-12", placeholder = "商户地址"})
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Merchant_Phone">
+                            联系方式 <span class="required">&nbsp;</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("Merchant_Phone", Model.Merchant_Phone, new { @class = "form-control col-md-7 col-xs-12", placeholder = "联系方式", validateType = "{required:true}" })
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            @if (@ViewBag.type == "1")
+                            {
+                                <button type="button" class="btn btn-success" onclick="SaveForm(this,'1')">保存信息</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-success" onclick="SaveForm(this, '0')">保存并增加下一个</button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/build/js/bar.js" type="text/javascript"></script>
+<script>
+    function SaveForm(form, type) {
+        $thisForm = $(form).parents('form');
+        if (type == "1") {
+            $thisForm.find("[name='formOperateType']").val("");
+        } else {
+            $thisForm.find("[name='formOperateType']").val("saveAndNewNext");
+        }
+        var url = "/MerchantInfo/Save";
+        onlySaveForm(form, url);
+    }
+</script>
+
+

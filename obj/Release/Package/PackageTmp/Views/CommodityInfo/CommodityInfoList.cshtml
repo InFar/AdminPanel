@@ -1,0 +1,116 @@
+﻿    @{
+        Layout = null;
+        ViewBag.Title = "CommodityInfoList";
+        List<AdminPanel.CodeModels.P_CommodityType> CTypeList = ViewBag.CommodityType;
+    }
+
+    <div class="page-title">
+        <div class="title_left">
+            <h3>商品管理</h3>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>商品列表</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_title list_tool_dialog_toolbar">
+                <div class="actions pull-left col-md-offset-0">
+                    <a href="/CommodityInfo/CreateCommodityInfo" class="btn btn-default btn-sm" operatetargettype="nextpage">
+                        <i class="fa fa-plus"></i>&nbsp;&nbsp;新增
+                    </a>
+                </div>
+                <div class="actions pull-left col-md-offset-0">
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/CommodityInfo/CreateCommodityInfo?code={sid_Iterm}&type=1" class="btn btn-default btn-sm" operatetargetid="InfoList" relationid="a_edit" nodatatip="请选中信息！" edit="edit" operatetargettype="nextpagewithparam">
+                        <i class="fa fa-pencil"></i>&nbsp;&nbsp;修改
+                    </a>
+                </div>
+                <div class="actions pull-left col-md-offset-0">
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="/CommodityInfo/DeleteCommodityInfo?code={sid_Iterm}" class="btn btn-default btn-sm" operatetargettype="ajaxtodo" singleoperate="singleoperate" nodatatip="请选中信息！" confirmtip="确认要删除所选数据吗？">
+                        <i class="fa fa-trash-o"></i>&nbsp;&nbsp;删除
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="InfoList_search" style="clear:both;">
+                    <form class="form-inline ">
+                        @Html.Hidden("isExecutedSearch", "0")
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="dataTables_length">
+                                    <label>
+                                        商品分类
+                                        @{
+                                            IList<SelectListItem> cItems = new List<SelectListItem>();
+                                            SelectListItem selectItem1 = new SelectListItem();
+                                            selectItem1.Value = "";
+                                            selectItem1.Text = "全部";
+                                            cItems.Add(selectItem1);
+                                            foreach (var c in CTypeList)
+                                            {
+                                                SelectListItem selectItem = new SelectListItem();
+                                                selectItem.Value = c.Type_Code.ToString();
+                                                selectItem.Text = c.Type_Name;
+                                                cItems.Add(selectItem);
+                                            }
+                                        }
+                                        @Html.DropDownList("searchtype", cItems, new { @class = "form-control input-sm" })
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="dataTables_filter">
+                                    <label>
+                                        Search:
+                                        @Html.TextBox("searchparam", "", new { @class = "form-control input-sm", @placeholder = "商品名称/条形码" })
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <table class="table table-striped jambo_table bulk_action" id="InfoList">
+                        <thead>
+                            <tr class="headings">
+                                <th class="column-title" style="display:none">CODE</th>
+                                <th class="column-title">商品名称 </th>
+                                <th class="column-title">商品条码 </th>
+                                <th class="column-title">商品分类 </th>
+                                <th class="column-title">商品进价 </th>
+                                <th class="column-title">商品单价 </th>
+                                <th class="column-title">规格 </th>
+                                <th class="column-title">单位 </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+   <script src="~/build/js/bar.js" type="text/javascript"></script>
+    <script>
+        var defaultColumns = [
+            { "sName": "Commodity_Code", "bVisible": false },
+             { "sName": "Commodity_Name" },
+             { "sName": "BarCode" },
+             { "sName": "Type_Name" },
+             { "sName": "PCSalePrice" },
+             { "sName": "PCSalePrice" },
+             { "sName": "Specification" },
+             { "sName": "Commodity_Unit" },
+        ];
+        var submitUrl = '/CommodityInfo/AjaxList';//数据获取地址
+        TableManaged.init('InfoList', "InfoList_search", defaultColumns, submitUrl);//用table id,table search id,默认列 初始化table对象
+
+        $("#searchparam,#searchtype").change(function (e) {
+            executeSearch('InfoList', 'InfoList_search')
+        });
+    </script>
+
+

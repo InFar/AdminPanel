@@ -1,0 +1,99 @@
+﻿@model AdminPanel.CodeModels.P_SystemMenu
+@{
+    Layout = null;
+    ViewBag.Title = "AddMenu";
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>添加菜单</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+@using (Html.BeginForm("SaveMenu", "Jurisdiction", FormMethod.Post, new { id = "shiftForm", @class = "form-horizontal form-label-left", role = "shift", onsubmit = "return validateCallback(this,dialogAjaxDone);" }))
+{
+                    <div class="form-group">
+                        @Html.Hidden("Menu_Id", Model.Menu_Id)
+                        @Html.Hidden("Menu_Code", Model.Menu_Code)
+                        @Html.Hidden("Menu_Createtime", Model.Menu_Createtime)
+                        @Html.Hidden("Menu_Creator", Model.Menu_Creator)
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="User_Accounts">
+                            名称 <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("Menu_Name", Model.Menu_Name, new { @class = "form-control col-md-7 col-xs-12", placeholder = "名称", maxlength = "100", validateType = "{required:true}", validateMessage = "{required:'名称不可为空'}" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="User_Pwd">
+                            父级
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @{
+                                IList<SelectListItem> ParentTypeItems = new List<SelectListItem>();
+                                SelectListItem selectItem1 = new SelectListItem();
+                                selectItem1.Value = "0";
+                                selectItem1.Text = "";
+                                ParentTypeItems.Add(selectItem1);
+                                foreach (var businessChancetypeType in ViewBag.ParentList)
+                                {
+                                    SelectListItem selectItem = new SelectListItem();
+                                    selectItem.Value = businessChancetypeType.Menu_Id.ToString();
+                                    selectItem.Text = businessChancetypeType.Menu_Name;
+                                    if (Model.Menu_Parent!=0&&Model.Menu_Parent== businessChancetypeType.Menu_Id)
+                                    {
+                                        selectItem.Selected = true;
+                                    }
+                                    ParentTypeItems.Add(selectItem);
+                                }
+                            }
+                            @Html.DropDownList("Menu_Parent", ParentTypeItems, new { @class = "form-control col-md-7 col-xs-12" })<i></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="User_Pwd">
+                            图标
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                           @Html.TextBox("Menu_Image", Model.Menu_Image, new { @class = "form-control col-md-7 col-xs-12", placeholder = "图标", maxlength = "200" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">
+                            地址
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("Menu_Url", Model.Menu_Url, new { @class = "form-control col-md-7 col-xs-12", placeholder = "地址", maxlength = "200" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            排序
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBox("Menu_Order", Model.Menu_Order, new { @class = "form-control col-md-7 col-xs-12", placeholder = "排序", maxlength = "200" })
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-success" onclick="SaveForm(this,'shiftForm')">保存</button>
+                        </div>
+                    </div>
+
+}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SaveForm(btn,formId) {
+        $form = $('#' + formId);
+        var url = "/Jurisdiction/SaveMenu";
+        onlySaveForm(btn, url);
+    }
+</script>

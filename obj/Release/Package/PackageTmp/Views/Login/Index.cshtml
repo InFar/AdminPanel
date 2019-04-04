@@ -1,0 +1,84 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>消费管理系统</title>
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link href="~/build/css/toastr.css" rel="stylesheet" />
+    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
+    <script src="~/build/js/toastr.js"></script>
+
+</head>
+<body class="login">
+    <div>
+        <a class="hiddenanchor" id="signup"></a>
+        <a class="hiddenanchor" id="signin"></a>
+        <div class="login_wrapper">
+            <div class="animate form login_form">
+                <section class="login_content">
+                   @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { id = "formid", @class = "form-horizontal form-label-left", role = "shift", onsubmit = "return validateCallback(this,dialogAjaxDone);" }))
+                   {
+                        <h1>后台 登录</h1>
+                        <div>
+                            <input id="account" type="text" class="form-control" placeholder="帐号" required="" />
+                        </div>
+                        <div>
+                            <input id="password" type="password" class="form-control" placeholder="密码" required="" />
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-default submit" id="submit">登 录</button>
+                            @*<a class="reset_pass" href="#">忘记密码?</a>*@
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="separator">
+                            <div class="clearfix"></div>
+                            <br />
+                            <div>
+                                <h1><i class="fa fa-th-large"></i> 北京艾亿沃德电子有限公司</h1>
+                            </div>
+                        </div>
+                   }
+                </section>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#submit").click(function (e) {
+            var html = $.ajax({
+                type: "POST",
+                data: {
+                    account: $("#account").val(),
+                    password: $("#password").val()
+                },
+                cache: false,
+                async: false,
+                url: "/Login/Login"
+            }).responseText;
+            if (html.indexOf("成功") >= 0) {
+                setTimeout("location.href = '/Home/Index';",1000)
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+

@@ -1,0 +1,121 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "DetailList";
+}
+
+<div class="col-md-12 col-sm-12 col-xs-12 ">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>消费明细 <small></small></h2>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div id="List_search" class="form-horizontal form-label-left">
+                @Html.Hidden("isExecutedSearch", "0")
+                <div class="form-group">
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                        @Html.TextBox("start_time", "", new { @class = "form-control has-feedback-left", @placeholder = "开始时间", aria_describedby = "inputSuccess2Status", @style = "padding-right:0px;" })
+
+                        <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                        <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                        @Html.TextBox("end_time", "", new { @class = "form-control has-feedback-left", @placeholder = "结束时间", aria_describedby = "inputSuccess2Status", @style = "padding-right:0px;" })
+
+                        <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                        <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                    </div>
+
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                        @Html.TextBox("chname", "", new { @class = "form-control", @placeholder = "商户ID", @style = "padding-right:0px;" })
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                        @Html.TextBox("barcode", "", new { @class = "form-control", @placeholder = "商品条码", @style = "padding-right:0px;" })
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                        <button onclick="btnClick()" type="submit" class="btn btn-success">查询</button>
+                        </div>
+                    </div>
+                </div>
+            <div>
+                <table class="table table-striped jambo_table bulk_action " id="TableList">
+                    <thead>
+                        <tr class="headings">
+                            <th class="column-title" style="display:none">CODE</th>
+                            <th class="column-title">商户 </th>
+                            <th class="column-title">商品条码 </th>
+                            <th class="column-title">商品名称 </th>
+                            <th class="column-title">消费金额 </th>
+                            <th class="column-title">消费时间 </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    @*<tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="even pointer">
+                                    <td class=" ">@item.Menu_Name</td>
+                                    <td class=" "><i class="fa @item.Menu_Image"></i></td>
+                                    <td class=" ">@item.Menu_Url</td>
+                                    <td class=" ">@item.Menu_Order</td>
+                                    <td class="last">
+                                        <a href="#">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a href="#">删除</a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>*@
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="~/build/js/bar.js" type="text/javascript"></script>
+<script>
+    $('#start_time').daterangepicker({
+        singleDatePicker: true,
+        singleClasses: "picker_1",
+        locale: {
+            format: 'YYYY/MM/DD',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        }
+    }, function (start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+    });
+    $('#start_time').val("");
+    $('#end_time').daterangepicker({
+        singleDatePicker: true,
+        singleClasses: "picker_1",
+        locale: {
+            format: 'YYYY/MM/DD',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        }
+    }, function (start, end, label) {
+        console.log(start.toISOString(), end.toISOString(), label);
+    });
+    $('#end_time').val("");
+    var defaultColumns = [
+        { "sName": "Id", "bVisible": false },
+         { "sName": "Merchant_Name" },
+            { "sName": "Barcode"},
+            { "sName": "Commodity_Name"},
+         { "sName": "Consumption_Money" },
+         { "sName": "Consumption_Time" }
+    ];
+    var submitUrl = '/SalesDetail/AjaxClassDetailList';//数据获取地址
+    TableManaged.init('TableList', "List_search", defaultColumns, submitUrl);//用table id,table search id,默认列 初始化table对象
+
+    function btnClick()
+    {
+        executeSearch('TableList', 'List_search')
+    }
+</script>
+
